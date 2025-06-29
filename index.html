@@ -206,6 +206,9 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       transform: scale(0.95);
       animation: modalAppear 0.3s forwards;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
     }
     
     @keyframes modalAppear {
@@ -216,7 +219,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       padding-bottom: 15px;
       border-bottom: 2px solid #eee;
     }
@@ -239,6 +242,18 @@
     .close-modal:hover {
       color: var(--color-principal);
       transform: rotate(90deg);
+    }
+    
+    .modal-body {
+      overflow-y: auto;
+      max-height: calc(90vh - 150px);
+      padding: 10px 5px;
+    }
+    
+    .modal-footer {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
     }
     
     .option-group {
@@ -326,13 +341,26 @@
       box-shadow: 0 3px 8px rgba(0,0,0,0.05);
     }
     
+    .menu-item .item-info {
+      flex: 1;
+    }
+    
     .item-name {
       font-weight: 500;
+      margin-bottom: 5px;
+    }
+    
+    .item-desc {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 5px;
     }
     
     .item-price {
       font-weight: bold;
       color: var(--color-terciario);
+      min-width: 80px;
+      text-align: right;
     }
     
     /* RESUMEN DEL PEDIDO */
@@ -898,6 +926,27 @@
       .price-grid {
         grid-template-columns: 1fr;
       }
+      
+      .sidebar {
+        width: 70px;
+      }
+      
+      .sidebar .tab span {
+        display: none;
+      }
+      
+      .sidebar .tab {
+        justify-content: center;
+        padding: 15px 5px;
+      }
+      
+      .sidebar .tab i {
+        font-size: 1.5rem;
+      }
+      
+      .main-content {
+        margin-left: 70px;
+      }
     }
   </style>
 </head>
@@ -909,68 +958,73 @@
         <h3 id="modalProductName"></h3>
         <button class="close-modal">&times;</button>
       </div>
-      <div class="option-group">
-        <h4>Tamaño</h4>
-        <div class="option-row">
-          <div class="option-label">Simple</div>
-          <div class="option-control">
-            <input type="radio" name="size" id="sizeSimple" value="simple" checked>
+      
+      <div class="modal-body">
+        <div class="option-group">
+          <h4>Tamaño</h4>
+          <div class="option-row">
+            <div class="option-label">Simple</div>
+            <div class="option-control">
+              <input type="radio" name="size" id="sizeSimple" value="simple" checked>
+            </div>
+          </div>
+          <div class="option-row">
+            <div class="option-label">Doble (+$<span id="doblePrice">1200</span>)</div>
+            <div class="option-control">
+              <input type="radio" name="size" id="sizeDoble" value="doble">
+            </div>
+          </div>
+          <div class="option-row">
+            <div class="option-label">Triple (+$<span id="triplePrice">3700</span>)</div>
+            <div class="option-control">
+              <input type="radio" name="size" id="sizeTriple" value="triple">
+            </div>
+          </div>
+          <div class="option-row">
+            <div class="option-label">Cuádruple (+$<span id="quadPrice">6200</span>)</div>
+            <div class="option-control">
+              <input type="radio" name="size" id="sizeQuad" value="quad">
+            </div>
+          </div>
+          <div class="option-row">
+            <div class="option-label">Quintuple (+$<span id="quintPrice">8700</span>)</div>
+            <div class="option-control">
+              <input type="radio" name="size" id="sizeQuint" value="quint">
+            </div>
           </div>
         </div>
-        <div class="option-row">
-          <div class="option-label">Doble (+$<span id="doblePrice">1200</span>)</div>
-          <div class="option-control">
-            <input type="radio" name="size" id="sizeDoble" value="doble">
+        
+        <div class="option-group">
+          <h4>Adicionales</h4>
+          <div class="option-row">
+            <div class="option-label">Cheddar (+$<span id="cheddarPrice">2000</span>)</div>
+            <div class="option-control">
+              <input type="checkbox" id="extraCheddar">
+            </div>
+          </div>
+          <div class="option-row">
+            <div class="option-label">Panceta (+$<span id="pancetaPrice">2000</span>)</div>
+            <div class="option-control">
+              <input type="checkbox" id="extraPanceta">
+            </div>
+          </div>
+          <div class="option-row">
+            <div class="option-label">Carne extra (+$<span id="carnePrice">2500</span>)</div>
+            <div class="option-control">
+              <input type="checkbox" id="extraCarne">
+            </div>
           </div>
         </div>
-        <div class="option-row">
-          <div class="option-label">Triple (+$<span id="triplePrice">3700</span>)</div>
-          <div class="option-control">
-            <input type="radio" name="size" id="sizeTriple" value="triple">
-          </div>
-        </div>
-        <div class="option-row">
-          <div class="option-label">Cuádruple (+$<span id="quadPrice">6200</span>)</div>
-          <div class="option-control">
-            <input type="radio" name="size" id="sizeQuad" value="quad">
-          </div>
-        </div>
-        <div class="option-row">
-          <div class="option-label">Quintuple (+$<span id="quintPrice">8700</span>)</div>
-          <div class="option-control">
-            <input type="radio" name="size" id="sizeQuint" value="quint">
-          </div>
+        
+        <div class="option-group">
+          <h4>Detalle adicional (opcional)</h4>
+          <textarea id="detalleAdicional" placeholder="Ej: Sin cebolla, sin tomate, etc." style="width:100%; padding:12px; border-radius:6px; border:1px solid #ddd; min-height:80px;"></textarea>
         </div>
       </div>
       
-      <div class="option-group">
-        <h4>Adicionales</h4>
-        <div class="option-row">
-          <div class="option-label">Cheddar (+$<span id="cheddarPrice">2000</span>)</div>
-          <div class="option-control">
-            <input type="checkbox" id="extraCheddar">
-          </div>
-        </div>
-        <div class="option-row">
-          <div class="option-label">Panceta (+$<span id="pancetaPrice">2000</span>)</div>
-          <div class="option-control">
-            <input type="checkbox" id="extraPanceta">
-          </div>
-        </div>
-        <div class="option-row">
-          <div class="option-label">Carne extra (+$<span id="carnePrice">2500</span>)</div>
-          <div class="option-control">
-            <input type="checkbox" id="extraCarne">
-          </div>
-        </div>
+      <div class="modal-footer">
+        <button class="add-btn" id="addToOrderModal"><i class="fas fa-plus"></i> Agregar al Pedido</button>
       </div>
-      
-      <div class="option-group">
-        <h4>Detalle adicional (opcional)</h4>
-        <textarea id="detalleAdicional" placeholder="Ej: Sin cebolla, sin tomate, etc." style="width:100%; padding:12px; border-radius:6px; border:1px solid #ddd; min-height:80px;"></textarea>
-      </div>
-      
-      <button class="add-btn" id="addToOrderModal"><i class="fas fa-plus"></i> Agregar al Pedido</button>
     </div>
   </div>
   
@@ -1218,18 +1272,87 @@
   
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Menú de hamburguesas
+      // Menú de hamburguesas actualizado según las imágenes
       var productos = [
-        { id: 1, nombre: "American Classic", tipo: "hamburguesas", precio: 8500 },
-        { id: 2, nombre: "American Blog", tipo: "hamburguesas", precio: 8600 },
-        { id: 3, nombre: "Oklahoma", tipo: "hamburguesas", precio: 8600 },
-        { id: 4, nombre: "Jordan", tipo: "hamburguesas", precio: 8500 },
-        { id: 5, nombre: "Menú 23", tipo: "hamburguesas", precio: 8500 },
-        { id: 6, nombre: "Cheeseburger", tipo: "hamburguesas", precio: 8500 },
-        { id: 7, nombre: "Diegote", tipo: "hamburguesas", precio: 8500 },
-        { id: 8, nombre: "Cuarto de Mila", tipo: "hamburguesas", precio: 8500 },
-        { id: 9, nombre: "La Vilancio", tipo: "hamburguesas", precio: 8500 },
-        { id: 10, nombre: "Solo Carne", tipo: "hamburguesas", precio: 7000 }
+        { 
+          id: 1, 
+          nombre: "American Classic", 
+          desc: "Queso Cheddar, Lechuga, Tomate y Cebolla Morada", 
+          tipo: "hamburguesas", 
+          precio: 8500,
+          precioDoble: 9700
+        },
+        { 
+          id: 2, 
+          nombre: "American Blog", 
+          desc: "Queso Cheddar, Panceta, Huevo y Barbacoa", 
+          tipo: "hamburguesas", 
+          precio: 8600,
+          precioDoble: 9800
+        },
+        { 
+          id: 3, 
+          nombre: "Oklahoma", 
+          desc: "Queso Cheddar, Panceta, Huevo y Cebolla Caramelizada", 
+          tipo: "hamburguesas", 
+          precio: 8600,
+          precioDoble: 9800
+        },
+        { 
+          id: 4, 
+          nombre: "Jordan", 
+          desc: "Queso Cheddar, Panceta, Salsa Staeker y Cebolla Crispy", 
+          tipo: "hamburguesas", 
+          precio: 8500,
+          precioDoble: 9700
+        },
+        { 
+          id: 5, 
+          nombre: "Menú 23", 
+          desc: "Queso Cheddar y Panceta", 
+          tipo: "hamburguesas", 
+          precio: 8500,
+          precioDoble: 9700
+        },
+        { 
+          id: 6, 
+          nombre: "Cheeseburger", 
+          desc: "Doble Queso Cheddar", 
+          tipo: "hamburguesas", 
+          precio: 8500,
+          precioDoble: 9700
+        },
+        { 
+          id: 7, 
+          nombre: "Diegote", 
+          desc: "Queso Dambo, Jamon, Huevo, Lechuga y Tomate", 
+          tipo: "hamburguesas", 
+          precio: 8500,
+          precioDoble: 9700
+        },
+        { 
+          id: 8, 
+          nombre: "Cuarto de Mila", 
+          desc: "Doble Queso Cheddar y Salsa Cuarto de Mila", 
+          tipo: "hamburguesas", 
+          precio: 8500,
+          precioDoble: 9700
+        },
+        { 
+          id: 9, 
+          nombre: "La Vilancio", 
+          desc: "Queso Cheddar, Panceta, Pepinillos y Salsa Cuarto de Mila (Cebolla, Ketchup, Mostaza)", 
+          tipo: "hamburguesas", 
+          precio: 8500,
+          precioDoble: 9700
+        },
+        { 
+          id: 10, 
+          nombre: "Solo Carne", 
+          desc: "Pan y Carne", 
+          tipo: "hamburguesas", 
+          precio: 7000
+        }
       ];
 
       // Precios de adicionales
@@ -1366,7 +1489,10 @@
           var item = document.createElement('div');
           item.className = 'menu-item';
           item.innerHTML = `
-            <div class="item-name">${p.nombre}</div>
+            <div class="item-info">
+              <div class="item-name">${p.nombre}</div>
+              <div class="item-desc">${p.desc}</div>
+            </div>
             <div class="item-price">$${p.precio}</div>
           `;
           
